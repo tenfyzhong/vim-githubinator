@@ -128,16 +128,16 @@ endfunction
 command! -range -nargs=0 GHO call GithubOpenURL(<line1>, <line2>)
 command! -range -nargs=0 GHC call GithubCopyURL(<line1>, <line2>)
 
-vnoremap <silent> <Plug>(githubinator-open) :<C-U>call GithubOpenURL(getpos("'<")[1], getpos("'>")[1])<CR>
-vnoremap <silent> <Plug>(githubinator-copy) :<C-U>call GithubCopyURL(getpos("'<")[1], getpos("'>")[1])<CR>
+xnoremap <silent> <Plug>(githubinator-open) :<C-U>call GithubOpenURL(getpos("'<")[1], getpos("'>")[1])<CR>
+xnoremap <silent> <Plug>(githubinator-copy) :<C-U>call GithubCopyURL(getpos("'<")[1], getpos("'>")[1])<CR>
 nnoremap <silent> <Plug>(githubinator-open) :<C-U>call GithubOpenURL(line('.'), line('.')+v:count1-1)<CR>
 nnoremap <silent> <Plug>(githubinator-copy) :<C-U>call GithubCopyURL(line('.'), line('.')+v:count1-1)<CR>
 
 if !hasmapto('<Plug>(githubinator-open)', 'v')
-    vmap <silent> gho <Plug>(githubinator-open)
+    xmap <silent> gho <Plug>(githubinator-open)
 endif
 if !hasmapto('<Plug>(githubinator-copy)', 'v')
-    vmap <silent> ghc <Plug>(githubinator-copy)
+    xmap <silent> ghc <Plug>(githubinator-copy)
 endif
 if !hasmapto('<Plug>(githubinator-open)', 'n')
     nmap <silent> gho <Plug>(githubinator-open)
