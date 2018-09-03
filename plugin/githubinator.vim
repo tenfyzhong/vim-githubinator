@@ -56,14 +56,23 @@ function! s:generate_url(beg, end) range
         echohl Error | echom 'Not a git repository' | echohl None
         return ''
     endif
-    " get the path relative to git repo
-    let l:relative_path = system("git rev-parse --show-prefix | tr -d '\n'")
+
+    " get remote relative to the branch
+    let l:remote = system(printf("git config --get branch.%s.remote | tr -d '\n'", l:branch))
+    if l:remote == ''
+        echohl Error | echom 'No remote branch' | echohl None
+        return ''
+    endif
+
     " get remote url
-    let l:git_remote = system("git remote -v | head -n 1 | awk '{print $2}' | tr -d '\n'")
+    let l:git_remote = system(printf("git config --get remote.%s.url | tr -d '\n'", l:remote))
     if l:git_remote == ''
         echohl Error | echom 'No remote address' | echohl None
         return ''
     endif
+
+    " get the path relative to git repo
+    let l:relative_path = system("git rev-parse --show-prefix | tr -d '\n'")
     " translate git protocal to https protocal
     " let l:git_remote = substitute(l:git_remote, '^git@github\.com:\(.*\)$', 'https://github.com/\1', '')
     let l:git_remote = <sid>parse_remote(l:git_remote)
