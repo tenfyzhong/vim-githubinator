@@ -36,6 +36,14 @@ let s:githubinator_host_map['git@gitlab.com:'] = 'https://gitlab.com/'
 let s:githubinator_host_map['git@bitbucket.org:'] = 'https://bitbucket.org/'
 let s:githubinator_host_map['https://\w*@bitbucket.org'] = 'https://bitbucket.org'
 
+let s:githubinator_multiline_delim = {}
+if exists('g:githubinator_multiline_delim') 
+    let s:githubinator_multiline_delim = g:githubinator_multiline_delim
+endif
+let s:githubinator_multiline_delim['https://github.com/'] = '-L'
+let s:githubinator_multiline_delim['https://gitlab.com/'] = '-'
+let s:githubinator_multiline_delim['https://bitbucket.org/'] = ':'
+
 
 function! s:parse_remote(url)
     for [k, v] in items(s:githubinator_host_map)
@@ -45,6 +53,15 @@ function! s:parse_remote(url)
         endif
     endfor
     return a:url
+endfunction
+
+function! s:multiline_delim(url)
+    for [k, v] in items(s:githubinator_multiline_delim)
+        if a:url =~# k
+            return v
+        endif
+    endfor
+    return '-L'
 endfunction
 
 
@@ -84,13 +101,8 @@ function! s:generate_url(beg, end) range
       let l:final_url = l:git_remote . '/blob/' . l:branch . '/' . l:relative_path . l:file_name . '#L' . a:beg
     endif
     if a:beg != a:end
-        if l:final_url =~# 'http\(s\?\)://gitlab'
-            let l:final_url .= '-' . a:end
-        elseif l:final_url =~# 'https://bitbucket.org'
-            let l:final_url .= ':' . a:end
-        else
-            let l:final_url .= '-L' . a:end
-        endif
+        let delim = <sid>multiline_delim(l:final_url)
+        let l:final_url .= delim . a:end
     endif
 
     return l:final_url

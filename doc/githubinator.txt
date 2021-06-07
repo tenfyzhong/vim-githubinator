@@ -58,16 +58,26 @@ eg: >
 <
 
 =======================================================================
-COMMAND
+OPTIONS
 
 *g:githubinator_host_map*
 Use this option to support multiple host. It will substitute key to value. 
 Default: >
-let g:githubinator_host_map: {
+let g:githubinator_host_map = {
     \ 'git@github.com:': 'https://github.com/',
     \ 'git@gitlab.com:': 'https://gitlab.com/',
     \ 'git@bitbucket.org:': 'https://bitbucket.org/',
     \ 'https://\w*@bitbucket.org': 'https://bitbucket.org',
+    \ }
+<
+
+*g:githubinator_multiline_delim*
+This option set the multiline delim for every host.
+Default: >
+let g:githubinator_multiline_delim = {
+    \ 'https://github.com/': '-L',
+    \ 'https://gitlab.com/': '-',
+    \ 'https://bitbucket.org/': ':',
     \ }
 <
 
@@ -86,4 +96,4 @@ Github:    https://github.com/prakashdanish/vim-githubinator
 
 =======================================================================
 
-" vim:ft=help:iskeyword+=-:iskeyword+=58:iskeyword+=#"
+" vim:ft=help:iskeyword+=-:iskeyword+=58:iskeyword+=#
